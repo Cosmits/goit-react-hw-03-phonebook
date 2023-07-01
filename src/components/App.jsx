@@ -18,6 +18,7 @@ export default class App extends Component {
     ],
     filter: '',
     hasError: false,
+    error: null,
   };
 
   addContact = data => {
@@ -51,19 +52,21 @@ export default class App extends Component {
   //================================================================
   componentDidMount() {
     const contacts = loadLocalStorage();
-    if (contacts) this.setState({ contacts });
+    if (contacts) this.setState({ contacts, hasError: false, error: null });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.contacts.length !== this.state.contacts.length) {
-      saveLocalStorage(this.state.contacts)
+      saveLocalStorage(this.state.contacts);
+      this.setState({ hasError: false, error: null });
     }
+
   }
 
   componentDidCatch(error, info) {
     // Якщо метод був викликаний, отже, є помилка!
     // Встановлюємо стан
-    this.setState({ hasError: true });
+    this.setState({ hasError: true, error: error });
     // Також можна надіслати звіт про помилку вашому аналітичному сервісу
     // logErrorToMyService(error, info);
   }
@@ -72,7 +75,7 @@ export default class App extends Component {
   render() {
     if (this.state.hasError) {
       // Рендеримо fallback UI
-      return <h1>Something went wrong, ERROR</h1>;
+      return <h1>Something went wrong, {JSON.stringify(this.state.error, null, '\t')}</h1>;
     }
 
     return (
