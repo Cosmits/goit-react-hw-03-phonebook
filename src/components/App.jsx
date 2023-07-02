@@ -17,8 +17,6 @@ export default class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    hasError: false,
-    error: null,
   };
 
   addContact = data => {
@@ -63,21 +61,8 @@ export default class App extends Component {
 
   }
 
-  componentDidCatch(error, info) {
-    // Якщо метод був викликаний, отже, є помилка!
-    // Встановлюємо стан
-    this.setState({ hasError: true, error: error });
-    // Також можна надіслати звіт про помилку вашому аналітичному сервісу
-    // logErrorToMyService(error, info);
-  }
-
   //================================================================
   render() {
-    if (this.state.hasError) {
-      // Рендеримо fallback UI
-      return <h1>Something went wrong, {JSON.stringify(this.state.error, null, '\t')}</h1>;
-    }
-
     return (
       <>
         <Section title="Phonebook">
